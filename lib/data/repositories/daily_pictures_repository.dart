@@ -1,30 +1,22 @@
-// photo_repository.dart
 import 'dart:convert';
 
-import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../services/api_service.dart';
-import '../models/daily_pictures_model.dart';
+import 'package:galaxypix/data/models/daily_pictures_model.dart';
+import 'package:http/http.dart';
 
 class PhotoRepository {
-  final ApiService apiService;
-  final SharedPreferences sharedPreferences;
-
-  PhotoRepository({required this.apiService, required this.sharedPreferences});
-
   Future<DailyPicturesModel> getPhotoOfTheDay() async {
-    final savedDailyPicture = sharedPreferences.getString('saved_photo');
-    var logger = Logger();
+    final Response response = await get(Uri.parse(
+        'https://api.nasa.gov/planetary/apod?api_key=tBkgBTz9BfwgAH4Y3jXf1sEAdfMgdmZZ2SkENFj4'));
 
-    if (savedDailyPicture != null) {
-      logger.d('Using saved photo');
-      return DailyPicturesModel.fromJson(json.decode(savedDailyPicture));
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseData = json.decode(response.body);
+      return DailyPicturesModel(
+          title: responseData['title'],
+          explanation: responseData['explanation'],
+          imageUrl: responseData['url'],
+          hdImageUrl: responseData['hdurl']);
     } else {
-      final photo = await apiService.getPhotoOfTheDay();
-      print('Fetched new photo: $photo');
-      sharedPreferences.setString('saved_photo', json.encode(photo.toJson()));
-      return photo;
+      throw Exception('Failed to load photo');
     }
   }
-
 }

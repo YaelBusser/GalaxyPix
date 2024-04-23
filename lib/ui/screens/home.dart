@@ -1,7 +1,7 @@
 // home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:galaxypix/data/blocs/daily_pictures_bloc.dart';
+import 'package:galaxypix/data/blocs/daily_pictures_cubit.dart';
 import 'package:galaxypix/data/models/daily_pictures_model.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Photographie du jour'),
       ),
-      body: BlocBuilder<DailyPicturesBloc, DailyPicturesModel>(
+      body: BlocBuilder<PicturesCubit, DailyPicturesModel>(
         builder: (context, dailyPicturesModel) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
