@@ -1,30 +1,21 @@
-// photo_repository.dart
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../services/api_service.dart';
 import '../models/daily_pictures_model.dart';
 
-class PhotoRepository {
-  final ApiService apiService;
-  final SharedPreferences sharedPreferences;
+class DailyPicturesRepository {
+  final String apiUrl;
 
-  PhotoRepository({required this.apiService, required this.sharedPreferences});
+  DailyPicturesRepository({required this.apiUrl});
 
-  Future<DailyPicturesModel> getPhotoOfTheDay() async {
-    final savedDailyPicture = sharedPreferences.getString('saved_photo');
-    var logger = Logger();
+  Future<DailyPictureModel> getDailyPicture() async {
+    final response = await http.get(apiUrl as Uri);
 
-    if (savedDailyPicture != null) {
-      logger.d('Using saved photo');
-      return DailyPicturesModel.fromJson(json.decode(savedDailyPicture));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      return DailyPictureModel.fromJson(data);
     } else {
-      final photo = await apiService.getPhotoOfTheDay();
-      print('Fetched new photo: $photo');
-      sharedPreferences.setString('saved_photo', json.encode(photo.toJson()));
-      return photo;
+      throw Exception('Failed to load daily picture');
     }
   }
-
 }

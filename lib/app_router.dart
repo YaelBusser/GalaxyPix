@@ -5,7 +5,7 @@ class AppRouter {
   Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (context) => HomeScreen());
+        return MaterialPageRoute(builder: (context) => HomePage());
       default:
         return MaterialPageRoute(
           builder: (context) => const Scaffold(

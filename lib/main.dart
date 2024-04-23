@@ -1,45 +1,34 @@
-// main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:galaxypix/ui/screens/home.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'app_router.dart';
-import 'data/services/api_service.dart';
-import 'data/repositories/daily_pictures_repository.dart';
+import 'package:http/http.dart' as http;
+
 import 'data/blocs/daily_pictures_bloc.dart';
+import 'data/repositories/daily_pictures_repository.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final sharedPreferences = await SharedPreferences.getInstance();
+void main() {
+  final DailyPicturesRepository repository = DailyPicturesRepository(
+    apiUrl: 'https://api.nasa.gov/planetary/apod?api_key=tBkgBTz9BfwgAH4Y3jXf1sEAdfMgdmZZ2SkENFj4',
+  );
 
-  runApp(MyApp(
-    sharedPreferences: sharedPreferences,
-  ));
+  runApp(MyApp(repository: repository));
 }
 
 class MyApp extends StatelessWidget {
-  final SharedPreferences sharedPreferences;
+  final DailyPicturesRepository repository;
 
-  const MyApp({super.key, required this.sharedPreferences});
+  MyApp({required this.repository});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'GalaxyPix',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      onGenerateRoute: AppRouter().onGenerateRoute,
       home: BlocProvider(
-        create: (context) => DailyPicturesBloc(
-          photoRepository: PhotoRepository(
-            apiService: ApiService(
-                apiKey: 'tBkgBTz9BfwgAH4Y3jXf1sEAdfMgdmZZ2SkENFj4',
-                apiUrl: 'https://api.nasa.gov/planetary/apod'),
-            sharedPreferences: sharedPreferences,
-          ),
-        ),
-        child: const HomeScreen(),
+        create: (context) => DailyPicturesBloc(repository: repository)..add(FetchDailyPicture()),
+        child: HomePage(),
       ),
     );
   }

@@ -1,18 +1,46 @@
 import 'package:bloc/bloc.dart';
-import '../repositories/daily_pictures_repository.dart';
+import 'package:meta/meta.dart';
+
 import '../models/daily_pictures_model.dart';
+import '../repositories/daily_pictures_repository.dart';
 
-class DailyPicturesBloc extends Bloc<dynamic, DailyPicturesModel> {
-  final PhotoRepository photoRepository;
+// États possibles du bloc
+abstract class DailyPicturesState {}
 
-  DailyPicturesBloc({required this.photoRepository}) : super(DailyPicturesModel(
-    title: '',
-    explanation: '',
-    imageUrl: '',
-    hdImageUrl: '',
-  ));
+class DailyPicturesInitial extends DailyPicturesState {}
 
-  Stream<DailyPicturesModel> mapEventToState(dynamic event) async* {
-    yield await photoRepository.getPhotoOfTheDay();
+class DailyPicturesLoaded extends DailyPicturesState {
+  final DailyPictureModel picture;
+
+  DailyPicturesLoaded(this.picture);
+}
+
+class DailyPicturesError extends DailyPicturesState {
+  final String errorMessage;
+
+  DailyPicturesError(this.errorMessage);
+}
+
+// Événements possibles du bloc
+abstract class DailyPicturesEvent {}
+
+class FetchDailyPicture extends DailyPicturesEvent {}
+
+class DailyPicturesBloc extends Bloc<DailyPicturesEvent, DailyPicturesState> {
+  final DailyPicturesRepository repository;
+
+  DailyPicturesBloc({required this.repository}) : super(DailyPicturesInitial());
+
+  @override
+  Stream<DailyPicturesState> mapEventToState(DailyPicturesEvent event) async* {
+    if (event is FetchDailyPicture) {
+      yield DailyPicturesInitial();
+      try {
+        final picture = await repository.getDailyPicture();
+        yield DailyPicturesLoaded(picture);
+      } catch (e) {
+        yield DailyPicturesError('Failed to fetch daily picture: $e');
+      }
+    }
   }
 }
