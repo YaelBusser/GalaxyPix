@@ -1,21 +1,22 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
-import '../models/daily_pictures_model.dart';
+import 'package:galaxypix/data/models/daily_pictures_model.dart';
+import 'package:http/http.dart';
 
-class DailyPicturesRepository {
-  final String apiUrl;
-
-  DailyPicturesRepository({required this.apiUrl});
-
-  Future<DailyPictureModel> getDailyPicture() async {
-    final response = await http.get(apiUrl as Uri);
+class PhotoRepository {
+  Future<DailyPicturesModel> getPhotoOfTheDay() async {
+    final Response response = await get(Uri.parse(
+        'https://api.nasa.gov/planetary/apod?api_key=tBkgBTz9BfwgAH4Y3jXf1sEAdfMgdmZZ2SkENFj4'));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      return DailyPictureModel.fromJson(data);
+      Map<String, dynamic> responseData = json.decode(response.body);
+      return DailyPicturesModel(
+          title: responseData['title'],
+          explanation: responseData['explanation'],
+          imageUrl: responseData['url'],
+          hdImageUrl: responseData['hdurl']);
     } else {
-      throw Exception('Failed to load daily picture');
+      throw Exception('Failed to load photo');
     }
   }
 }

@@ -1,15 +1,30 @@
-class DailyPictureModel {
+class DailyPicturesModel {
   final String title;
   final String explanation;
   final String imageUrl;
+  final String hdImageUrl;
 
-  DailyPictureModel({required this.title, required this.explanation, required this.imageUrl});
-
-  factory DailyPictureModel.fromJson(Map<String, dynamic> json) {
-    return DailyPictureModel(
+  DailyPicturesModel({
+    required this.title,
+    required this.explanation,
+    required this.imageUrl,
+    required this.hdImageUrl,
+  });
+  factory DailyPicturesModel.fromJson(Map<String, dynamic> json) {
+    return DailyPicturesModel(
       title: json['title'],
       explanation: json['explanation'],
-      imageUrl: json['hdurl'],
+      imageUrl: json['url'],
+      hdImageUrl: json['hdurl'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'explanation': explanation,
+      'url': imageUrl,
+      'hdurl': hdImageUrl,
+    };
   }
 }
