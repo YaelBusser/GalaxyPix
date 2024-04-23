@@ -2,7 +2,7 @@ class DailyPicturesModel {
   final String title;
   final String explanation;
   final String imageUrl;
-    final String hdImageUrl;
+  final String hdImageUrl;
 
   DailyPicturesModel({
     required this.title,
