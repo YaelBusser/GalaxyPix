@@ -7,6 +7,7 @@ import 'package:galaxypix/ui/screens/discover.dart';
 
 import '../widgets/menu.dart';
 
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -15,6 +16,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Redirection en fonction de l'index sélectionné
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const DiscoverScreen()),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xFF9100a2),
         foregroundColor: Colors.white,
         title: const Text('Photographie du jour'),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Accueil"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Découvrir"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.purple,
+        onTap: _onItemTapped,
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -61,7 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Menu(
         onTap: () {
           Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const DiscoverScreen()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const DiscoverScreen()));
         },
         isHomePage: true,
         isDiscoverPage: false,

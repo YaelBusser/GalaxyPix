@@ -17,6 +17,30 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   late DateTime startDate = DateTime.now();
   late DateTime endDate = DateTime.now();
 
+  int _selectedIndex = 1;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Redirection en fonction de l'index sélectionné
+    switch (index) {
+      case 0:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const DiscoverScreen()),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +48,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         backgroundColor: const Color(0xFF9100a2),
         foregroundColor: Colors.white,
         title: const Text('Découvrir'),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Accueil"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Découvrir"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.purple,
+        onTap: _onItemTapped,
       ),
       body: BlocBuilder<PicturesBetweenDatesCubit, List<DailyPicturesModel>>(
         builder: (context, dailyPicturesList) {
