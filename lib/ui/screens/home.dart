@@ -7,39 +7,56 @@ import 'package:galaxypix/ui/screens/discover.dart';
 
 import '../widgets/menu.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF9100a2),
+        foregroundColor: Colors.white,
         title: const Text('Photographie du jour'),
       ),
-      body: BlocBuilder<PicturesCubit, DailyPicturesModel>(
-        builder: (context, dailyPicturesModel) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.network(dailyPicturesModel.hdImageUrl),
-              const SizedBox(height: 16),
-              Text(
-                dailyPicturesModel.title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(dailyPicturesModel.explanation),
-                ),
-              ),
-            ],
-          );
-        },
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SingleChildScrollView(
+          child: BlocBuilder<PicturesCubit, DailyPicturesModel?>(
+            builder: (context, dailyPicturesModel) {
+              if (dailyPicturesModel == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(dailyPicturesModel.title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    const SizedBox(height: 15),
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(dailyPicturesModel.imageUrl)),
+                    const SizedBox(height: 15),
+                    Text(
+                      dailyPicturesModel.explanation,
+                      textAlign: TextAlign.justify,
+                    )
+                  ],
+                );
+              }
+            },
+          ),
+        ),
       ),
       drawer: Menu(
         onTap: () {

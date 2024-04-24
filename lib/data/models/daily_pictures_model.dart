@@ -1,9 +1,9 @@
 class DailyPicturesModel {
-  final String title;
-  final String explanation;
-  final String imageUrl;
-  final String hdImageUrl;
-  final String date;
+  late String title;
+  late String explanation;
+  late String imageUrl;
+  late String hdImageUrl;
+  late String date;
 
   DailyPicturesModel({
     required this.title,
