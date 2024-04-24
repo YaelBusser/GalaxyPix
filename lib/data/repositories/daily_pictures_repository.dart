@@ -6,9 +6,8 @@ import 'package:http/http.dart';
 
 class PhotoRepository {
   Future<DailyPicturesModel> getPhotoOfTheDay() async {
-    final apodKey = dotenv.env["APOD_API_KEY"];
     final Response response = await get(Uri.parse(
-        'https://api.nasa.gov/planetary/apod?api_key=${apodKey.toString()}'));
+        'https://api.nasa.gov/planetary/apod?api_key=${dotenv.env["APOD_API_KEY"].toString()}'));
     if (response.statusCode == 200) {
       Map<String, dynamic> responseData = json.decode(response.body);
       return DailyPicturesModel(
@@ -27,7 +26,7 @@ class PhotoRepository {
     String startDateString = startDate.toIso8601String().substring(0, 10);
     String endDateString = endDate.toIso8601String().substring(0, 10);
     String apiUrl = 'https://api.nasa.gov/planetary/apod';
-    String apiKey = 'tBkgBTz9BfwgAH4Y3jXf1sEAdfMgdmZZ2SkENFj4';
+    String apiKey = dotenv.env["APOD_API_KEY"].toString();
     String url =
         '$apiUrl?api_key=$apiKey&start_date=$startDateString&end_date=$endDateString';
 

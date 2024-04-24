@@ -20,7 +20,7 @@ void main() async {
 
   final picturesBetweenDatesCubit = PicturesBetweenDatesCubit(photoRepo);
 
-  final startDate = DateTime.now().subtract(const Duration(days: 10));
+  final startDate = DateTime.now();
   final endDate = DateTime.now();
   await picturesBetweenDatesCubit.loadPicturesBetweenDates(startDate, endDate);
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

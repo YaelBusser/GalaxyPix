@@ -41,6 +41,11 @@ class PicturesBetweenDatesCubit extends Cubit<List<DailyPicturesModel>> {
   Future<void> loadPicturesBetweenDates(
       DateTime startDate, DateTime endDate) async {
     try {
+      if (startDate.isAfter(endDate)) {
+        throw Exception(
+            "La date de début doit être inférieur à la date de fin");
+      }
+
       final pictures =
           await photoRepo.getPhotosBetweenDates(startDate, endDate);
       // Translator translator = Translator(
