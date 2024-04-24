@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:galaxypix/data/models/daily_pictures_model.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../data/blocs/daily_pictures_cubit.dart';
-import '../../data/repositories/daily_pictures_repository.dart';
 import '../widgets/menu.dart';
 import 'home.dart';
 
@@ -27,7 +26,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
       body: BlocBuilder<PicturesBetweenDatesCubit, List<DailyPicturesModel>>(
         builder: (context, dailyPicturesList) {
           return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -87,8 +85,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                             borderRadius: BorderRadius.circular(10),
                             child: SizedBox(
                               width: dailyPicturesList[index]
-                                  .imageUrl
-                                  .contains('youtube') ? MediaQuery.of(context).size.width - 20 : MediaQuery.of(context).size.width / 2 - 15,
+                                      .imageUrl
+                                      .contains('youtube')
+                                  ? MediaQuery.of(context).size.width - 20
+                                  : MediaQuery.of(context).size.width / 2 - 15,
                               height: 250,
                               child: Stack(
                                 children: [
@@ -101,16 +101,16 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                                 dailyPicturesList[index]
                                                     .imageUrl),
                                             flags: const YoutubePlayerFlags(
-                                              autoPlay: false,
-                                              mute: false,
-                                              hideControls: false,
-                                              controlsVisibleAtStart: true,
-                                              showLiveFullscreenButton: true
-                                            ),
+                                                autoPlay: true,
+                                                mute: false,
+                                                hideControls: false,
+                                                controlsVisibleAtStart: false,
+                                                showLiveFullscreenButton:
+                                                    false),
                                           ),
                                           showVideoProgressIndicator: true,
-                                          width: MediaQuery.of(context).size.width - 20
-                                        )
+                                          aspectRatio: 16 / 9,
+                                          width: 400)
                                       : Image.network(
                                           dailyPicturesList[index].imageUrl,
                                           fit: BoxFit.cover,
@@ -119,13 +119,17 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                         ),
                                   Positioned(
                                     bottom: dailyPicturesList[index]
-                                        .imageUrl
-                                        .contains('youtube') ? null : 0,
+                                            .imageUrl
+                                            .contains('youtube')
+                                        ? null
+                                        : 0,
                                     left: 0,
                                     right: 0,
                                     top: dailyPicturesList[index]
-                                        .imageUrl
-                                        .contains('youtube') ? 0 : null,
+                                            .imageUrl
+                                            .contains('youtube')
+                                        ? 0
+                                        : null,
                                     child: Container(
                                       color: Colors.black.withOpacity(0.5),
                                       padding: const EdgeInsets.symmetric(
