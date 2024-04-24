@@ -7,7 +7,7 @@ import '../widgets/menu.dart';
 import 'home.dart';
 
 class DiscoverScreen extends StatefulWidget {
-  const DiscoverScreen({Key? key}) : super(key: key);
+  const DiscoverScreen({super.key});
 
   @override
   _DiscoverScreenState createState() => _DiscoverScreenState();
@@ -21,11 +21,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF9100a2),
+        foregroundColor: Colors.white,
         title: const Text('Découvrir'),
       ),
       body: BlocBuilder<PicturesBetweenDatesCubit, List<DailyPicturesModel>>(
         builder: (context, dailyPicturesList) {
           return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -136,6 +139,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                           vertical: 8, horizontal: 16),
                                       child: Text(
                                         dailyPicturesList[index].title,
+                                        textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
