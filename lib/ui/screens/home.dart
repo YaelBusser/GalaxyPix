@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:galaxypix/data/blocs/daily_pictures_cubit.dart';
 import 'package:galaxypix/data/models/daily_pictures_model.dart';
+import 'package:galaxypix/ui/screens/discover.dart';
+
+import '../widgets/menu.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -37,6 +40,14 @@ class HomeScreen extends StatelessWidget {
             ],
           );
         },
+      ),
+      drawer: Menu(
+        onTap: () {
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const DiscoverScreen()));
+        },
+        isHomePage: true,
+        isDiscoverPage: false,
       ),
     );
   }

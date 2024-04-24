@@ -14,8 +14,25 @@ void main() async {
 
   await picturesCubit.loadPictureDay();
 
-  runApp(BlocProvider(create: (_) => picturesCubit, child: const MyApp()));
-}
+  final picturesBetweenDatesCubit =
+      PicturesBetweenDatesCubit(photoRepo);
+
+  final startDate = DateTime.now().subtract(const Duration(days: 10));
+  final endDate = DateTime.now();
+  await picturesBetweenDatesCubit.loadPicturesBetweenDates(startDate, endDate);
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<PicturesCubit>(
+          create: (_) => picturesCubit,
+        ),
+        BlocProvider<PicturesBetweenDatesCubit>(
+          create: (_) => picturesBetweenDatesCubit,
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
